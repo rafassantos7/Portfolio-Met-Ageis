@@ -65,6 +65,30 @@ nav {
     gap: 40px;
 }
 
+/* wrapper genérico usado em páginas internas (ex: Experiências), sem nav/logo */
+header .inner {
+    width: min(100% - 40px, var(--max-width));
+    min-height: 80px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+header .inner h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--color-text);
+}
+
+header .inner p {
+    margin-top: 4px;
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+}
+
 
 /* =========================
    LOGO
@@ -562,6 +586,121 @@ nav {
     transform: translateY(-50%);
 }
 
+/* =========================
+   EXPERIÊNCIAS
+========================= */
+
+#trajetoria {
+    width: min(100% - 40px, var(--max-width));
+    margin: 60px auto 80px;
+    position: relative;
+    padding-left: 34px;
+}
+
+/* linha vertical conectando os cards */
+#trajetoria::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: var(--color-neutral);
+}
+
+.exp {
+    position: relative;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    padding: 26px 30px;
+    margin: 0 0 24px 0;
+    text-align: justify;
+    box-shadow: 0 2px 8px rgba(38, 55, 70, 0.06);
+    border-left: 4px solid var(--color-secondary);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    animation: fadeUp 0.6s ease both;
+    animation-delay: calc(var(--i, 0) * 0.08s);
+}
+
+/* marcador na linha do tempo */
+.exp::before {
+    content: "";
+    position: absolute;
+    left: -38px;
+    top: 30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-background);
+}
+
+.exp:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 10px 24px rgba(38, 55, 70, 0.12);
+    border-left-color: var(--color-primary);
+}
+
+.exp h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-align: left;
+}
+
+.exp h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 2px;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.exp p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-top: 8px;
+}
+
+.exp p strong {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+/* período em badge, antes do texto justificado de responsabilidades */
+.exp p:nth-of-type(1) {
+    display: inline-block;
+    background: var(--color-secondary);
+    color: var(--color-text);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+.exp p:nth-of-type(1) strong { color: var(--color-text); }
+
+/* aplica atraso crescente pra cada card, sem precisar de JS */
+.exp:nth-child(1) { --i: 1; }
+.exp:nth-child(2) { --i: 2; }
+.exp:nth-child(3) { --i: 3; }
+.exp:nth-child(4) { --i: 4; }
+.exp:nth-child(5) { --i: 5; }
+.exp:nth-child(6) { --i: 6; }
+.exp:nth-child(7) { --i: 7; }
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 /* =========================
    TABLET
@@ -687,6 +826,16 @@ nav {
         width: 320px;
         height: 320px;
     }
+
+    #trajetoria {
+        padding-left: 24px;
+    }
+
+    .exp {
+        padding: 20px 18px;
+    }
+
+    .exp::before { left: -28px; }
 }
 
 
