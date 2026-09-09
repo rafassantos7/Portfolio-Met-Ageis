@@ -11,17 +11,13 @@ gsap.to(nome, {
   ease: "none"
 });
 
-
 gsap.from(infs, {
   opacity: 0,
   duration: 1,        // Definido um tempo padrão para o fade in
   delay: 2       // Pequeno atraso para dar um efeito mais fluido
 });
 
-
-
 gsap.set(".photo-shape", { perspective: 1000 });
-
 
 const outerRX = gsap.quickTo(".photo-shape", "rotationX", { ease: "power3",duration: 0.5, });
 const outerRY = gsap.quickTo(".photo-shape", "rotationY", { ease: "power3",duration: 0.5, });
@@ -47,18 +43,34 @@ imgShape.addEventListener("pointerleave", (e) => {
   innerY(0);
 });
 
-
+const experienciaTrack = document.querySelector(".experiencia-track");
+const experienciaPanel = document.querySelector(".experiencia"); // o painel (wrapper), não os cards individuais
+const overflowExperiencia = experienciaTrack.scrollHeight - experienciaPanel.clientHeight + 100; // tamanho visivel da tela
+const PX_POR_UNIDADE = 1000; // velocidade do "scroll"
+const duracaoLeitura = Math.max(overflowExperiencia / PX_POR_UNIDADE, 0.1);
 
 const tl = gsap.timeline({
     scrollTrigger: {
         trigger: ".informacoes",
         start: "top 80px",
-        end: "+=4000",
+        end: "+=5500", //aumento para compensar o novo trecho
         scrub: 1,
         pin: true,
         snap: {
-            snapTo: "labels",
-            duration: 0.5,
+            snapTo: (progress) => {
+                const time = progress * tl.duration();
+                const inicioLeitura = tl.labels["experiencia"];
+                const fimLeitura = tl.labels["certificacoes"];
+                if (time > inicioLeitura && time < fimLeitura) {
+                    return progress;
+                }
+                const tempos = Object.values(tl.labels);
+                const maisProximo = tempos.reduce((prev, curr) =>
+                    Math.abs(curr - time) < Math.abs(prev - time) ? curr : prev
+                );
+                return maisProximo / tl.duration();
+            },
+            duration: 0.2,
             ease: "power2.inOut"
         }
     }
@@ -66,11 +78,17 @@ const tl = gsap.timeline({
 
 tl.addLabel("experiencia");
 
-tl.from(".certificacoes", {
-    xPercent: 100
+tl.to(".experiencia-track", {
+    y: -overflowExperiencia,
+    ease: "none",
+    duration: duracaoLeitura // proporcional ao conteúdo real
 });
 
 tl.addLabel("certificacoes");
+
+tl.from(".certificacoes", {
+    xPercent: 100
+});
 
 tl.from(".premios", {
     yPercent: 100
@@ -83,7 +101,6 @@ tl.from(".extra", {
 });
 
 tl.addLabel("extra");
-
 
 const st = tl.scrollTrigger;
 
