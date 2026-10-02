@@ -166,11 +166,175 @@ nav {
     overflow: hidden;
 }
 
-.certificacoes{
-    background-color: blue;
+.certificacoes,
+.premios {
+    background: var(--color-background);
+    overflow: hidden; /* sem rolagem interna, para não prender o scroll da página */
 }
-.premios{
-    background-color: yellow;
+
+
+/* elementos decorativos (mesmo padrão de ferramentas) */
+
+.certificacoes::before,
+.premios::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(68, 116, 157, 0.08);
+    left: -300px;
+    top: 80px;
+}
+
+.certificacoes::after,
+.premios::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: rgba(198, 212, 225, 0.12);
+    right: -400px;
+    bottom: -350px;
+}
+
+/* =========================
+   CERTIFICAÇÕES E PRÊMIOS
+========================= */
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.cert-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 100px;
+    padding: 18px;
+    background: var(--color-white);
+    border: 1px solid rgba(189, 184, 173, 0.4);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition:
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.cert-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(68, 116, 157, 0.13);
+}
+
+.cert-icon {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(68, 116, 157, 0.1);
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.cert-card:hover .cert-icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: rotate(-4deg);
+}
+
+.cert-info h4 {
+    color: var(--color-text);
+    font-size: 0.98rem;
+    line-height: 1.3;
+}
+
+.cert-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    margin-top: 8px;
+}
+
+.cert-meta p {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cert-meta .ferramenta-tag {
+    margin-top: 0;
+}
+
+.cert-desc {
+    margin-top: 10px;
+    color: var(--color-text-light);
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+/* prêmios: 2 colunas e ícone alinhado ao topo, por causa da descrição */
+
+.premios .cert-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.premios .cert-card {
+    align-items: flex-start;
+}
+
+/* telas menores: o conteúdo pode ser maior que a tela, então ela rola por dentro */
+
+@media (max-width: 900px) {
+    .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px), (max-height: 760px) {
+    .certificacoes,
+    .premios {
+        overflow-y: auto;
+    }
+
+    .certificacoes::before,
+    .certificacoes::after,
+    .premios::before,
+    .premios::after {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    .cert-grid,
+    .premios .cert-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .cert-card {
+        min-height: auto;
+        padding: 16px;
+    }
+
+    .certificacoes .ferramentas-header p,
+    .premios .ferramentas-header p {
+        display: none;
+    }
 }
 .extra{
     background-color: brown;
@@ -572,17 +736,42 @@ nav {
     position: relative;
     width: min(100% - 40px, var(--max-width));
     margin: 20px auto 40px;
-    padding-left: 44px;
+    --experience-date-width: 150px;
+    --experience-gap: 32px;
 }
 
 .experiencia-track::before {
     content: "";
     position: absolute;
-    left: 9px;
+    left: calc(var(--experience-date-width) + var(--experience-gap) / 2);
     top: 10px;
     bottom: 10px;
     width: 2px;
     background: var(--color-neutral);
+}
+
+.experiencia-item {
+    display: grid;
+    grid-template-columns: var(--experience-date-width) minmax(0, 1fr);
+    gap: var(--experience-gap);
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+.experiencia-periodo {
+    padding-top: 26px;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: right;
+    transform-origin: right center;
+    transition: color var(--transition), transform var(--transition);
+}
+
+.experiencia-item:has(.experiencia-card:hover) .experiencia-periodo {
+    color: var(--color-text);
+    transform: scale(1.08);
 }
 
 .experiencia-card {
@@ -590,7 +779,7 @@ nav {
     background: var(--color-white);
     border-radius: var(--radius);
     padding: 26px 30px;
-    margin: 0 0 24px 0;
+    margin: 0;
     text-align: justify;
     border: 1px solid rgba(189, 184, 173, 0.4);
     transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
@@ -611,7 +800,7 @@ nav {
 .experiencia-card::before {
     content: "";
     position: absolute;
-    left: -42px;
+    left: calc(0px - var(--experience-gap) / 2 - 7px);
     top: 30px;
     width: 10px;
     height: 10px;
@@ -648,19 +837,6 @@ nav {
     color: var(--color-text);
     font-weight: 700;
 }
-
-/* badge de período — mais discreto que um fill sólido */
-.experiencia-card p:nth-of-type(1) {
-    display: inline-block;
-    background: rgba(68, 116, 157, 0.12); /* tinta leve da cor primária */
-    color: var(--color-primary);
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: left;
-}
-
 
 /* =========================
    FERRAMENTAS
@@ -1165,6 +1341,15 @@ nav {
 ========================= */
 
 @media (max-width: 600px) {
+
+    .experiencia-track {
+        --experience-date-width: 90px;
+        --experience-gap: 20px;
+    }
+
+    .experiencia-periodo {
+        font-size: 0.7rem;
+    }
 
     .ferramentas-container {
         padding: 65px 0 70px;
