@@ -219,7 +219,7 @@ const tl = gsap.timeline({
         end: () => {
             return "+=" +
                 (
-                    window.innerHeight * 8
+                    window.innerHeight * 6
                 );
         },
 
@@ -345,7 +345,7 @@ tl.to(
     {
         xPercent: 0,
         ease: "power2.inOut",
-        duration: 1
+        duration: 0.6
     }
 );
 
@@ -395,6 +395,26 @@ tl.to(
 );
 
 tl.addLabel("extra");
+
+const extraGalleryTrack =
+    document.querySelector(".extra-gallery-track");
+
+const extraGallerySet =
+    extraGalleryTrack?.querySelector(".extra-gallery-set");
+
+if (
+    extraGalleryTrack &&
+    extraGallerySet
+) {
+    const duplicateSet =
+        extraGallerySet.cloneNode(true);
+
+    duplicateSet.setAttribute("aria-hidden", "true");
+    duplicateSet.querySelectorAll("img").forEach(image => {
+        image.alt = "";
+    });
+    extraGalleryTrack.append(duplicateSet);
+}
 
 /* =========================
    NAVEGAÇÃO
