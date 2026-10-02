@@ -1,132 +1,626 @@
-gsap.registerPlugin(TextPlugin, ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(
+    TextPlugin,
+    ScrollTrigger,
+    ScrollToPlugin
+);
 
 const nome = document.getElementById("nome");
 const infs = document.querySelector(".apresentacao h2");
 const imgShape = document.querySelector(".img-profissional");
-const paineis = gsap.utils.toArray(".painel");
+
+
+/* =========================
+   NOME
+========================= */
 
 gsap.to(nome, {
-  duration: 2,
-  text: "Luis Alberto Oliveira",
-  ease: "none"
+    duration: 2,
+    text: "Luis Alberto Oliveira",
+    ease: "none"
 });
+
+
+/* =========================
+   SUBTÍTULO
+========================= */
 
 gsap.from(infs, {
-  opacity: 0,
-  duration: 1,        // Definido um tempo padrão para o fade in
-  delay: 2       // Pequeno atraso para dar um efeito mais fluido
+    opacity: 0,
+    duration: 1,
+    delay: 2
 });
 
-gsap.set(".photo-shape", { perspective: 1000 });
 
-const outerRX = gsap.quickTo(".photo-shape", "rotationX", { ease: "power3",duration: 0.5, });
-const outerRY = gsap.quickTo(".photo-shape", "rotationY", { ease: "power3",duration: 0.5, });
-const innerX = gsap.quickTo(".img-luis", "x", { ease: "power3",duration: 0.5, });
-const innerY = gsap.quickTo(".img-luis", "y", { ease: "power3",duration: 0.5, });
+/* =========================
+   EFEITO FOTO
+========================= */
 
-imgShape.addEventListener("pointermove", (e) => {
- const rect = imgShape.getBoundingClientRect();
-
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = (e.clientY - rect.top) / rect.height;
-  outerRX(gsap.utils.interpolate(10, -10, y));
-  outerRY(gsap.utils.interpolate(-10, 10, x));
-
-  innerX(gsap.utils.interpolate(-20, 20, x));
-  innerY(gsap.utils.interpolate(-20, 20, y));
+gsap.set(".photo-shape", {
+    perspective: 1000
 });
 
-imgShape.addEventListener("pointerleave", (e) => {
-  outerRX(0);
-  outerRY(0);
-  innerX(0);
-  innerY(0);
-});
-
-const experienciaTrack = document.querySelector(".experiencia-track");
-const experienciaPanel = document.querySelector(".experiencia"); // o painel (wrapper), não os cards individuais
-const overflowExperiencia = experienciaTrack.scrollHeight - experienciaPanel.clientHeight + 100; // tamanho visivel da tela
-const PX_POR_UNIDADE = 1000; // velocidade do "scroll"
-const duracaoLeitura = Math.max(overflowExperiencia / PX_POR_UNIDADE, 0.1);
-
-const tl = gsap.timeline({
-    scrollTrigger: {
-        trigger: ".informacoes",
-        start: "top 80px",
-        end: "+=5500", //aumento para compensar o novo trecho
-        scrub: 1,
-        pin: true,
-        snap: {
-            snapTo: (progress) => {
-                const time = progress * tl.duration();
-                const inicioLeitura = tl.labels["experiencia"];
-                const fimLeitura = tl.labels["certificacoes"];
-                if (time > inicioLeitura && time < fimLeitura) {
-                    return progress;
-                }
-                const tempos = Object.values(tl.labels);
-                const maisProximo = tempos.reduce((prev, curr) =>
-                    Math.abs(curr - time) < Math.abs(prev - time) ? curr : prev
-                );
-                return maisProximo / tl.duration();
-            },
-            duration: 0.2,
-            ease: "power2.inOut"
-        }
+const outerRX = gsap.quickTo(
+    ".photo-shape",
+    "rotationX",
+    {
+        ease: "power3",
+        duration: 0.5
     }
+);
+
+const outerRY = gsap.quickTo(
+    ".photo-shape",
+    "rotationY",
+    {
+        ease: "power3",
+        duration: 0.5
+    }
+);
+
+const innerX = gsap.quickTo(
+    ".img-luis",
+    "x",
+    {
+        ease: "power3",
+        duration: 0.5
+    }
+);
+
+const innerY = gsap.quickTo(
+    ".img-luis",
+    "y",
+    {
+        ease: "power3",
+        duration: 0.5
+    }
+);
+
+
+if (imgShape) {
+
+    imgShape.addEventListener(
+        "pointermove",
+        (e) => {
+
+            const rect =
+                imgShape.getBoundingClientRect();
+
+            const x =
+                (e.clientX - rect.left) /
+                rect.width;
+
+            const y =
+                (e.clientY - rect.top) /
+                rect.height;
+
+            outerRX(
+                gsap.utils.interpolate(
+                    10,
+                    -10,
+                    y
+                )
+            );
+
+            outerRY(
+                gsap.utils.interpolate(
+                    -10,
+                    10,
+                    x
+                )
+            );
+
+            innerX(
+                gsap.utils.interpolate(
+                    -20,
+                    20,
+                    x
+                )
+            );
+
+            innerY(
+                gsap.utils.interpolate(
+                    -20,
+                    20,
+                    y
+                )
+            );
+
+        }
+    );
+
+
+    imgShape.addEventListener(
+        "pointerleave",
+        () => {
+
+            outerRX(0);
+            outerRY(0);
+
+            innerX(0);
+            innerY(0);
+
+        }
+    );
+
+}
+
+
+/* =========================
+   EXPERIÊNCIA
+========================= */
+
+const experienciaTrack =
+    document.querySelector(
+        ".experiencia-track"
+    );
+
+const experienciaPanel =
+    document.querySelector(
+        ".experiencia"
+    );
+
+
+let overflowExperiencia = 0;
+
+
+/*
+ * Calcula o tamanho real
+ * do conteúdo da experiência.
+ */
+
+function calcularExperiencia() {
+
+    if (
+        !experienciaTrack ||
+        !experienciaPanel
+    ) {
+        return;
+    }
+
+    overflowExperiencia =
+        Math.max(
+            experienciaTrack.scrollHeight -
+            experienciaPanel.clientHeight +
+            40,
+            0
+        );
+}
+
+
+calcularExperiencia();
+
+
+/* =========================
+   ESTADO INICIAL
+========================= */
+
+gsap.set(".experiencia", {
+    xPercent: 0,
+    yPercent: 0
 });
 
-tl.addLabel("experiencia");
-
-tl.to(".experiencia-track", {
-    y: -overflowExperiencia,
-    ease: "none",
-    duration: duracaoLeitura // proporcional ao conteúdo real
+gsap.set(".ferramentas", {
+    xPercent: 100,
+    yPercent: 0
 });
 
-tl.addLabel("certificacoes");
-
-tl.from(".certificacoes", {
-    xPercent: 100
+gsap.set(".certificacoes", {
+    xPercent: 100,
+    yPercent: 0
 });
 
-tl.from(".premios", {
+gsap.set(".premios", {
+    xPercent: 0,
     yPercent: 100
 });
 
+gsap.set(".extra", {
+    xPercent: -100,
+    yPercent: 0
+});
+
+
+/* =========================
+   TIMELINE
+========================= */
+
+const tl = gsap.timeline({
+
+    scrollTrigger: {
+
+        trigger: ".informacoes",
+
+        start: "top top",
+
+        /*
+         * Cinco etapas.
+         *
+         * Usamos mais espaço de scroll
+         * para deixar a navegação confortável.
+         */
+
+        end: () => {
+
+            return "+=" +
+                (
+                    window.innerHeight * 8
+                );
+
+        },
+
+        scrub: 1.5,
+
+        pin: true,
+
+        anticipatePin: 1,
+
+        invalidateOnRefresh: true,
+
+
+        /* =========================
+           SNAP
+        ========================= */
+
+        snap: {
+
+            snapTo: (progress) => {
+
+                const labels =
+                    tl.labels;
+
+                const tempos =
+                    Object.values(labels);
+
+
+                if (!tempos.length) {
+                    return progress;
+                }
+
+
+                const time =
+                    progress *
+                    tl.duration();
+
+
+                const inicioExperiencia =
+                    labels.experiencia;
+
+                const inicioFerramentas =
+                    labels.ferramentas;
+
+
+                /*
+                 * Durante a experiência,
+                 * o usuário pode ler os cards
+                 * livremente.
+                 */
+
+                if (
+                    time >= inicioExperiencia &&
+                    time < inicioFerramentas
+                ) {
+
+                    return progress;
+
+                }
+
+
+                /*
+                 * Nas demais seções,
+                 * procura a label mais próxima.
+                 */
+
+                const maisProximo =
+                    tempos.reduce(
+                        (prev, curr) => {
+
+                            return Math.abs(
+                                curr - time
+                            ) <
+                            Math.abs(
+                                prev - time
+                            )
+                                ? curr
+                                : prev;
+
+                        }
+                    );
+
+
+                return (
+                    maisProximo /
+                    tl.duration()
+                );
+
+            },
+
+            duration: {
+                min: 0.4,
+                max: 0.7
+            },
+
+            delay: 0.1,
+
+            ease: "power2.inOut"
+
+        }
+
+    }
+
+});
+
+
+/* =========================
+   EXPERIÊNCIA
+========================= */
+
+tl.addLabel("experiencia");
+
+
+/*
+ * A experiência usa o espaço necessário
+ * para que os cards sejam lidos.
+ */
+
+tl.to(
+    ".experiencia-track",
+    {
+
+        y: () => {
+
+            return -overflowExperiencia;
+
+        },
+
+        ease: "none",
+
+        duration: () => {
+
+            return Math.max(
+                overflowExperiencia / 600,
+                2
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   FERRAMENTAS
+========================= */
+
+tl.addLabel("ferramentas");
+
+
+tl.to(
+    ".ferramentas",
+    {
+
+        xPercent: 0,
+
+        ease: "power2.inOut",
+
+        duration: 1
+
+    }
+);
+
+
+/* =========================
+   CERTIFICAÇÕES
+========================= */
+
+tl.addLabel("certificacoes");
+
+
+tl.to(
+    ".certificacoes",
+    {
+
+        xPercent: 0,
+
+        ease: "power2.inOut",
+
+        duration: 1
+
+    }
+);
+
+
+/* =========================
+   PRÊMIOS
+========================= */
+
 tl.addLabel("premios");
 
-tl.from(".extra", {
-    xPercent: -100
-});
+
+tl.to(
+    ".premios",
+    {
+
+        yPercent: 0,
+
+        ease: "power2.inOut",
+
+        duration: 1
+
+    }
+);
+
+
+/* =========================
+   EXTRA
+========================= */
 
 tl.addLabel("extra");
 
-const st = tl.scrollTrigger;
 
-document.querySelectorAll("#nav-list a").forEach(link => {
+tl.to(
+    ".extra",
+    {
 
-    link.addEventListener("click", e => {
+        xPercent: 0,
 
-        const id = link.getAttribute("href").replace("#", "");
+        ease: "power2.inOut",
 
-        if (!tl.labels[id]) return;
+        duration: 1
 
-        e.preventDefault();
+    }
+);
 
-        const time = tl.labels[id];
 
-        const progress = time / tl.duration();
+/* =========================
+   NAVEGAÇÃO
+========================= */
 
-        const scrollPosition =
-            st.start + (st.end - st.start) * progress;
+const st =
+    tl.scrollTrigger;
 
-        gsap.to(window, {
-            duration: 1,
-            scrollTo: scrollPosition,
-            ease: "power2.inOut"
-        });
+
+document
+    .querySelectorAll("#nav-list a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            (e) => {
+
+                const href =
+                    link.getAttribute(
+                        "href"
+                    );
+
+
+                /*
+                 * Links externos ou
+                 * sem âncora não são
+                 * tratados.
+                 */
+
+                if (
+                    !href ||
+                    !href.startsWith("#")
+                ) {
+                    return;
+                }
+
+
+                const id =
+                    href.substring(1);
+
+
+                /* =========================
+                   INÍCIO
+                ========================= */
+
+                if (id === "inicio") {
+
+                    e.preventDefault();
+
+
+                    gsap.to(window, {
+
+                        duration: 1.2,
+
+                        scrollTo: {
+                            y: 0,
+                            autoKill: false
+                        },
+
+                        ease: "power2.inOut"
+
+                    });
+
+
+                    return;
+                }
+
+
+                /* =========================
+                   VERIFICA LABEL
+                ========================= */
+
+                if (
+                    tl.labels[id] === undefined
+                ) {
+
+                    return;
+
+                }
+
+
+                e.preventDefault();
+
+
+                /* =========================
+                   ATUALIZA SCROLLTRIGGER
+                ========================= */
+
+                ScrollTrigger.refresh();
+
+
+                /*
+                 * Usa o método nativo do
+                 * ScrollTrigger para converter
+                 * a label em posição real
+                 * da página.
+                 */
+
+                const scrollPosition =
+                    st.labelToScroll(id);
+
+
+                /* =========================
+                   SCROLL
+                ========================= */
+
+                gsap.to(window, {
+
+                    duration: 1.2,
+
+                    scrollTo: {
+
+                        y: scrollPosition,
+
+                        autoKill: false
+
+                    },
+
+                    ease: "power2.inOut"
+
+                });
+
+            }
+        );
 
     });
 
-});
+
+/* =========================
+   REFRESH
+========================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        calcularExperiencia();
+
+        ScrollTrigger.refresh();
+
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        calcularExperiencia();
+
+        ScrollTrigger.refresh();
+
+    }
+);

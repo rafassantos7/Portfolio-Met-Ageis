@@ -26,6 +26,11 @@
 
 html {
     scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
 }
 
 body {
@@ -35,6 +40,11 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 a{
@@ -143,7 +153,8 @@ nav {
 
 .informacoes {
     position: relative;
-    height: calc(100dvh - 60px);
+    width: 100%;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -152,6 +163,7 @@ nav {
     inset: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .certificacoes{
@@ -486,9 +498,7 @@ nav {
 
     overflow: hidden;
 
-    border-radius:
-        70% 45% 38% 62%
-        / 35% 40% 60% 65%;
+    border-radius: 50%;
 
     background: var(--color-secondary);
 
@@ -650,6 +660,555 @@ nav {
     font-weight: 600;
     text-align: left;
 }
+
+
+/* =========================
+   FERRAMENTAS
+========================= */
+
+.ferramentas {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: var(--color-background);
+
+    overflow-y: auto;
+}
+
+/* elementos decorativos */
+
+.ferramentas::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(68, 116, 157, 0.08);
+
+    left: -300px;
+    top: 80px;
+}
+
+.ferramentas::after {
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    border-radius: 50%;
+
+    background: rgba(198, 212, 225, 0.12);
+
+    right: -400px;
+    bottom: -350px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.ferramentas-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(100% - 40px, var(--max-width));
+
+    margin: 0 auto;
+
+    padding: 90px 0 100px;
+}
+
+
+/* =========================
+   HEADER DA SEÇÃO
+========================= */
+
+.ferramentas-header {
+    max-width: 700px;
+
+    margin-bottom: 55px;
+}
+
+.ferramentas-header > span {
+    display: block;
+
+    margin-bottom: 14px;
+
+    color: var(--color-primary);
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+}
+
+.ferramentas-header h2 {
+    color: var(--color-text);
+
+    font-size: clamp(2.3rem, 4vw, 3.6rem);
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+}
+
+.ferramentas-header h2 strong {
+    color: var(--color-primary);
+
+    font-weight: 500;
+}
+
+.ferramentas-header p {
+    max-width: 620px;
+
+    margin-top: 18px;
+
+    color: var(--color-text-light);
+
+    font-size: 0.95rem;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   SEÇÕES
+========================= */
+
+.ferramentas-section {
+    position: relative;
+
+    margin-bottom: 60px;
+}
+
+.ferramentas-section:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================
+   HEADER INTERNO
+========================= */
+
+.ferramentas-section-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.section-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--color-primary);
+
+    color: var(--color-white);
+
+    font-size: 1.15rem;
+}
+
+.ferramentas-section-header h3 {
+    color: var(--color-text);
+
+    font-size: 1.25rem;
+
+    line-height: 1.2;
+}
+
+.ferramentas-section-header p {
+    margin-top: 3px;
+
+    color: var(--color-text-light);
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================
+   GRID DE FRAMEWORKS
+========================= */
+
+.ferramentas-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.ferramenta-card {
+    position: relative;
+
+    min-height: 230px;
+
+    padding: 25px;
+
+    background: var(--color-white);
+
+    border: 1px solid rgba(189, 184, 173, 0.4);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    transition:
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.ferramenta-card:hover {
+    border-color: var(--color-primary);
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 8px 22px rgba(68, 116, 157, 0.13);
+}
+
+
+/* =========================
+   NÚMERO
+========================= */
+
+.ferramenta-number {
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    color: rgba(68, 116, 157, 0.18);
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   ÍCONE
+========================= */
+
+.ferramenta-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 10px;
+
+    background: rgba(68, 116, 157, 0.1);
+
+    color: var(--color-primary);
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.ferramenta-card:hover .ferramenta-icon {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+
+    transform: rotate(-4deg);
+}
+
+
+/* =========================
+   TEXTO
+========================= */
+
+.ferramenta-card h4 {
+    margin-bottom: 7px;
+
+    color: var(--color-text);
+
+    font-size: 1.1rem;
+}
+
+.ferramenta-card p {
+    color: var(--color-text-light);
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   TAG
+========================= */
+
+.ferramenta-tag {
+    display: inline-block;
+
+    margin-top: 18px;
+
+    padding: 3px 10px;
+
+    border-radius: 20px;
+
+    background: rgba(68, 116, 157, 0.1);
+
+    color: var(--color-primary);
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   FERRAMENTAS
+========================= */
+
+.ferramentas-tools {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================
+   CARD DE FERRAMENTA
+========================= */
+
+.ferramenta-tool {
+    min-height: 100px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 18px;
+
+    background: var(--color-white);
+
+    border: 1px solid rgba(189, 184, 173, 0.4);
+
+    border-radius: var(--radius);
+
+    transition:
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.ferramenta-tool:hover {
+    border-color: var(--color-primary);
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 22px rgba(68, 116, 157, 0.13);
+}
+
+
+/* =========================
+   ÍCONE DAS FERRAMENTAS
+========================= */
+
+.tool-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color: var(--color-white);
+
+    font-size: 1.3rem;
+
+    font-weight: 700;
+}
+
+.tool-icon.jira {
+    background: #2684ff;
+}
+
+.tool-icon.azure {
+    background: #0078d4;
+}
+
+.tool-icon.powerbi {
+    background: #f2c811;
+
+    color: #3b3b3b;
+}
+
+
+/* =========================
+   INFORMAÇÕES
+========================= */
+
+.tool-info {
+    flex: 1;
+}
+
+.tool-info h4 {
+    color: var(--color-text);
+
+    font-size: 1rem;
+}
+
+.tool-info p {
+    margin-top: 2px;
+
+    color: var(--color-text-light);
+
+    font-size: 0.75rem;
+}
+
+
+/* =========================
+   SETA
+========================= */
+
+.tool-arrow {
+    color: var(--color-neutral);
+
+    font-size: 1.2rem;
+
+    transition:
+        color var(--transition),
+        transform var(--transition);
+}
+
+.ferramenta-tool:hover .tool-arrow {
+    color: var(--color-primary);
+
+    transform: translate(2px, -2px);
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .ferramentas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ferramentas-tools {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .ferramenta-tool {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .tool-arrow {
+        display: none;
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .ferramentas-container {
+        padding: 65px 0 70px;
+    }
+
+    .ferramentas-header {
+        margin-bottom: 40px;
+    }
+
+    .ferramentas-header h2 {
+        font-size: 2.25rem;
+
+        letter-spacing: -1.5px;
+    }
+
+    .ferramentas-header p {
+        font-size: 0.88rem;
+    }
+
+    .ferramentas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ferramentas-tools {
+        grid-template-columns: 1fr;
+    }
+
+    .ferramenta-card {
+        min-height: auto;
+    }
+
+    .ferramenta-tool {
+        min-height: 82px;
+
+        flex-direction: row;
+
+        align-items: center;
+    }
+
+    .tool-arrow {
+        display: block;
+    }
+}
+
 
 @keyframes fadeUp {
     from {
