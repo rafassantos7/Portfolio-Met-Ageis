@@ -8,7 +8,6 @@ const nome = document.getElementById("nome");
 const infs = document.querySelector(".apresentacao h2");
 const imgShape = document.querySelector(".img-profissional");
 
-
 /* =========================
    NOME
 ========================= */
@@ -19,7 +18,6 @@ gsap.to(nome, {
     ease: "none"
 });
 
-
 /* =========================
    SUBTÍTULO
 ========================= */
@@ -29,7 +27,6 @@ gsap.from(infs, {
     duration: 1,
     delay: 2
 });
-
 
 /* =========================
    EFEITO FOTO
@@ -75,13 +72,10 @@ const innerY = gsap.quickTo(
     }
 );
 
-
 if (imgShape) {
-
     imgShape.addEventListener(
         "pointermove",
         (e) => {
-
             const rect =
                 imgShape.getBoundingClientRect();
 
@@ -124,26 +118,20 @@ if (imgShape) {
                     y
                 )
             );
-
         }
     );
-
 
     imgShape.addEventListener(
         "pointerleave",
         () => {
-
             outerRX(0);
             outerRY(0);
 
             innerX(0);
             innerY(0);
-
         }
     );
-
 }
-
 
 /* =========================
    EXPERIÊNCIA
@@ -159,9 +147,7 @@ const experienciaPanel =
         ".experiencia"
     );
 
-
 let overflowExperiencia = 0;
-
 
 /*
  * Calcula o tamanho real
@@ -169,7 +155,6 @@ let overflowExperiencia = 0;
  */
 
 function calcularExperiencia() {
-
     if (
         !experienciaTrack ||
         !experienciaPanel
@@ -186,9 +171,7 @@ function calcularExperiencia() {
         );
 }
 
-
 calcularExperiencia();
-
 
 /* =========================
    ESTADO INICIAL
@@ -219,75 +202,57 @@ gsap.set(".extra", {
     yPercent: 0
 });
 
-
 /* =========================
    TIMELINE
 ========================= */
 
 const tl = gsap.timeline({
-
     scrollTrigger: {
-
         trigger: ".informacoes",
-
         start: "top top",
-
         /*
          * Cinco etapas.
          *
          * Usamos mais espaço de scroll
          * para deixar a navegação confortável.
          */
-
         end: () => {
-
             return "+=" +
                 (
-                    window.innerHeight * 8
+                    window.innerHeight * 6
                 );
-
         },
 
         scrub: 1.5,
-
         pin: true,
-
         anticipatePin: 1,
-
         invalidateOnRefresh: true,
-
 
         /* =========================
            SNAP
         ========================= */
 
         snap: {
-
             snapTo: (progress) => {
-
                 const labels =
                     tl.labels;
 
                 const tempos =
                     Object.values(labels);
 
-
                 if (!tempos.length) {
                     return progress;
                 }
 
-
                 const time =
                     progress *
                     tl.duration();
-
 
                 const inicioExperiencia =
                     labels.experiencia;
 
                 const inicioFerramentas =
                     labels.ferramentas;
-
 
                 /*
                  * Durante a experiência,
@@ -304,7 +269,6 @@ const tl = gsap.timeline({
 
                 }
 
-
                 /*
                  * Nas demais seções,
                  * procura a label mais próxima.
@@ -313,7 +277,6 @@ const tl = gsap.timeline({
                 const maisProximo =
                     tempos.reduce(
                         (prev, curr) => {
-
                             return Math.abs(
                                 curr - time
                             ) <
@@ -322,16 +285,13 @@ const tl = gsap.timeline({
                             )
                                 ? curr
                                 : prev;
-
                         }
                     );
-
 
                 return (
                     maisProximo /
                     tl.duration()
                 );
-
             },
 
             duration: {
@@ -340,22 +300,16 @@ const tl = gsap.timeline({
             },
 
             delay: 0.1,
-
             ease: "power2.inOut"
-
         }
-
     }
-
 });
-
 
 /* =========================
    EXPERIÊNCIA
 ========================= */
 
 tl.addLabel("experiencia");
-
 
 /*
  * A experiência usa o espaço necessário
@@ -365,9 +319,7 @@ tl.addLabel("experiencia");
 tl.to(
     ".experiencia-track",
     {
-
         y: () => {
-
             return -overflowExperiencia;
 
         },
@@ -380,96 +332,89 @@ tl.to(
                 overflowExperiencia / 600,
                 2
             );
-
         }
-
     }
 );
-
 
 /* =========================
    FERRAMENTAS
 ========================= */
 
-tl.addLabel("ferramentas");
-
-
 tl.to(
     ".ferramentas",
     {
-
         xPercent: 0,
-
         ease: "power2.inOut",
-
-        duration: 1
-
+        duration: 0.6
     }
 );
 
+tl.addLabel("ferramentas");
 
 /* =========================
    CERTIFICAÇÕES
 ========================= */
 
-tl.addLabel("certificacoes");
-
-
 tl.to(
     ".certificacoes",
     {
-
         xPercent: 0,
-
         ease: "power2.inOut",
-
         duration: 1
-
     }
 );
 
+tl.addLabel("certificacoes");
 
 /* =========================
    PRÊMIOS
 ========================= */
 
-tl.addLabel("premios");
-
-
 tl.to(
     ".premios",
     {
-
         yPercent: 0,
-
         ease: "power2.inOut",
-
         duration: 1
-
     }
 );
 
+tl.addLabel("premios");
 
 /* =========================
    EXTRA
 ========================= */
 
-tl.addLabel("extra");
-
-
 tl.to(
     ".extra",
     {
-
         xPercent: 0,
-
         ease: "power2.inOut",
-
         duration: 1
-
     }
 );
 
+tl.addLabel("extra");
+
+const extraGalleryTrack =
+    document.querySelector(".extra-gallery-track");
+
+const extraGallerySet =
+    extraGalleryTrack?.querySelector(".extra-gallery-set");
+
+if (
+    extraGalleryTrack &&
+    extraGallerySet
+) {
+    const duplicateSet =
+        extraGallerySet.cloneNode(true);
+
+    duplicateSet.setAttribute("aria-hidden", "true");
+    duplicateSet.querySelectorAll("img").forEach(image => {
+        image.alt = "";
+    });
+    extraGalleryTrack.append(duplicateSet);
+}
 
 /* =========================
    NAVEGAÇÃO
@@ -478,20 +423,16 @@ tl.to(
 const st =
     tl.scrollTrigger;
 
-
 document
     .querySelectorAll("#nav-list a")
     .forEach(link => {
-
         link.addEventListener(
             "click",
             (e) => {
-
                 const href =
                     link.getAttribute(
                         "href"
                     );
-
 
                 /*
                  * Links externos ou
@@ -506,37 +447,27 @@ document
                     return;
                 }
 
-
                 const id =
                     href.substring(1);
-
 
                 /* =========================
                    INÍCIO
                 ========================= */
 
                 if (id === "inicio") {
-
                     e.preventDefault();
 
-
                     gsap.to(window, {
-
                         duration: 1.2,
-
                         scrollTo: {
                             y: 0,
                             autoKill: false
                         },
-
                         ease: "power2.inOut"
-
                     });
-
 
                     return;
                 }
-
 
                 /* =========================
                    VERIFICA LABEL
@@ -545,21 +476,16 @@ document
                 if (
                     tl.labels[id] === undefined
                 ) {
-
                     return;
-
                 }
 
-
                 e.preventDefault();
-
 
                 /* =========================
                    ATUALIZA SCROLLTRIGGER
                 ========================= */
 
                 ScrollTrigger.refresh();
-
 
                 /*
                  * Usa o método nativo do
@@ -571,15 +497,12 @@ document
                 const scrollPosition =
                     st.labelToScroll(id);
 
-
                 /* =========================
                    SCROLL
                 ========================= */
 
                 gsap.to(window, {
-
                     duration: 1.2,
-
                     scrollTo: {
 
                         y: scrollPosition,
@@ -587,16 +510,11 @@ document
                         autoKill: false
 
                     },
-
                     ease: "power2.inOut"
-
                 });
-
             }
         );
-
     });
-
 
 /* =========================
    REFRESH
@@ -605,14 +523,10 @@ document
 window.addEventListener(
     "load",
     () => {
-
         calcularExperiencia();
-
         ScrollTrigger.refresh();
-
     }
 );
-
 
 window.addEventListener(
     "resize",
